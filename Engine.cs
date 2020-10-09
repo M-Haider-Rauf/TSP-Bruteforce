@@ -106,17 +106,32 @@ class Engine {
 
     private void Update()
     {
-        if (!done && started) {
-            float distance = TotalDistance(points, currentOrder); //compute distance of curr point order
-            ++checkedCount;
+        //if new best is found, we can break out of update loop
+        //so that new best is visible
+        bool newBestFound = false;
 
-            if (distance < leastDistance) { //if distance of curr Order is less than least dist so far
-                leastDistance = distance;
-                bestOrder = currentOrder.Clone() as int[];  //current Order is now best order
-            }
-            if (!NextPerm(currentOrder)) {
-                done = true;
-                started = false;
+        //a formula I came up with to scale iterations per frame
+        //with the no. of points
+        // basically I increase iterations per frame proportional to O(n!)
+       
+        int itersPerFrame = 1;
+        if (pointCount > 5) itersPerFrame = ((Factorial(pointCount) / Factorial(5)) / 4);
+
+        for (int i = 1; i <= itersPerFrame && !newBestFound; ++i) { //repeat perms 1000 times / frame
+            if (!done && started) {
+                float distance = TotalDistance(points, currentOrder); //compute distance of curr point order
+                ++checkedCount;
+
+                if (distance < leastDistance) { //if distance of curr Order is less than least dist so far
+                    leastDistance = distance;
+
+                    bestOrder = currentOrder.Clone() as int[];  //current Order is now best order
+                    newBestFound = true;
+                }
+                if (!NextPerm(currentOrder)) {
+                    done = true;
+                    started = false;
+                }
             }
         }
     }
