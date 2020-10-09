@@ -169,8 +169,16 @@ class Engine {
             Position = new Vector2f(WIN_WIDTH / 2 + 50, 0.0f)
         };
 
+
+        Text countText = new Text("Point Count: " + pointCount, font) {
+            CharacterSize = 25,
+            FillColor = Color.Cyan,
+            Position = new Vector2f(400.0f, 0.0f)
+        };
+
         window.Draw(percentageText);
         window.Draw(distanceText);
+        window.Draw(countText);
 
         if (done) {
             Sprite sprite = new Sprite(texture) {
@@ -190,6 +198,8 @@ class Engine {
             };
 
             window.Draw(doneText);
+
+            
         }
 
         window.Display();
